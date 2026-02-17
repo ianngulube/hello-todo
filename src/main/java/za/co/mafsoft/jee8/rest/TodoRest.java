@@ -20,8 +20,13 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TodoRest {
+
+    private final TodoService todoService;
+
     @Inject
-    TodoService todoService;
+    public TodoRest(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @POST
     @Path("new")
@@ -49,7 +54,7 @@ public class TodoRest {
 
     @PUT
     @Path("complete")
-    public Response markAsComplete(@QueryParam("id") Long id){
+    public Response markAsComplete(@QueryParam("id") Long id) {
         Todo todo = todoService.findTodo(id);
         todo.setCompleted(true);
         todoService.updateTodo(todo);
