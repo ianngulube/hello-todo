@@ -1,0 +1,51 @@
+package za.co.mafsoft.jee8.rest;
+
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import za.co.mafsoft.jee8.entity.Todo;
+import za.co.mafsoft.jee8.service.TodoService;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("todo")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class TodoRest {
+    @Inject
+    TodoService todoService;
+
+    @POST
+    @Path("new")
+    public Response createTodo(@Valid Todo todo) {
+        return Response.ok(todoService.createTodo(todo)).build();
+    }
+
+    @POST
+    @Path("edit")
+    public Response editTodo(Todo todo) {
+        return Response.ok(todoService.updateTodo(todo)).build();
+    }
+
+    @GET
+    @Path("{id}")
+    public Response getTodo(@PathParam("id") Long id) {
+        return Response.ok(todoService.findTodo(id)).build();
+    }
+
+    @GET
+    @Path("list")
+    public Response getTodos() {
+        return Response.ok(todoService.getTodos()).build();
+    }
+
+    @PUT
+    @Path("complete")
+    public Response markAsComplete(@QueryParam("id") Long id){
+        Todo todo = todoService.findTodo(id);
+        todo.setCompleted(true);
+        todoService.updateTodo(todo);
+        return Response.ok(todo).build();
+    }
+}
