@@ -57,7 +57,6 @@ public class TodoRest {
     public Response markAsComplete(@QueryParam("id") Long id) {
         Todo todo = todoService.findTodo(id);
         todo.setCompleted(true);
-        todoService.updateTodo(todo);
-        return Response.ok(todo).build();
+        return Response.ok(todoService.updateTodo(todo)).build();
     }
 }
